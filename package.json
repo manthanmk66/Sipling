@@ -1,0 +1,67 @@
+{
+  "name": "sipling",
+  "version": "1.0.0",
+  "description": "Sipling — a friendly desktop companion that reminds you to drink water.",
+  "main": "src/main.js",
+  "author": "Manthan Reddy",
+  "license": "MIT",
+  "scripts": {
+    "gen:icons": "node scripts/generate-tray-icon.cjs",
+    "start": "npm run gen:icons && electron .",
+    "dist": "npm run gen:icons && electron-builder",
+    "dist:mac": "npm run gen:icons && electron-builder --mac",
+    "dist:win": "npm run gen:icons && electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
+  },
+  "build": {
+    "appId": "com.manthan.sipling",
+    "productName": "Sipling",
+    "files": [
+      "src/**/*",
+      "assets/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.healthcare-fitness",
+      "icon": "assets/icon.png",
+      "artifactName": "${productName}.${ext}",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": "universal"
+        },
+        {
+          "target": "zip",
+          "arch": "universal"
+        }
+      ]
+    },
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "manthanmk66",
+      "repo": "sipling"
+    }
+  }
+}

@@ -1,0 +1,148 @@
+:root {
+  --accent: #3BA7F0;
+  --accent-dark: #1f7fc4;
+  --bubble: rgba(255, 255, 255, 0.97);
+  --text: #123;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  /* Belt-and-braces: the main process also makes the window click-through. */
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.stage { position: absolute; inset: 0; }
+
+/* ---- The buddy rig ------------------------------------------------------- */
+.buddy {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  /* Hidden by default; JS sets the resting corner + drives the walk-in. */
+  opacity: 0;
+  visibility: hidden;
+  transition: transform .9s cubic-bezier(.22,.68,.28,1.02), opacity .4s ease;
+  will-change: transform, opacity;
+}
+/* Resting positions per corner (margins from the screen edge). */
+.buddy[data-corner="bottom-right"] { right: 40px; bottom: 40px; }
+.buddy[data-corner="bottom-left"]  { left: 40px;  bottom: 40px; }
+.buddy[data-corner="top-right"]    { right: 40px; top: 40px; }
+.buddy[data-corner="top-left"]     { left: 40px;  top: 40px; }
+
+/* Off-screen start/exit offsets (walk in from the nearest horizontal edge). */
+.buddy[data-corner$="right"].off { transform: translateX(140%); }
+.buddy[data-corner$="left"].off  { transform: translateX(-140%); }
+.buddy.on { transform: translateX(0); }
+
+/* While walking, the avatar bobs like footsteps. */
+.buddy.walking .avatar-wrap { animation: walkbob .42s ease-in-out infinite; }
+@keyframes walkbob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-9px) rotate(2deg); }
+}
+/* Gentle idle breathing once it has arrived. */
+.buddy.resting .avatar-wrap { animation: breathe 2.6s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Interactive parts only light up once resting. */
+.buddy .bubble, .buddy .actions, .buddy .progress {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .3s ease .15s, transform .3s ease .15s;
+}
+.buddy.resting .bubble,
+.buddy.resting .actions,
+.buddy.resting .progress {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Speech bubble ------------------------------------------------------- */
+.bubble {
+  position: relative;
+  background: var(--bubble);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 12px 34px rgba(20, 60, 100, 0.28);
+  max-width: 260px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+  pointer-events: auto;
+}
+.bubble small {
+  display: block;
+  font-weight: 500;
+  font-size: 12px;
+  color: #5a6b7a;
+  margin-top: 4px;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: var(--bubble) transparent transparent transparent;
+}
+
+/* ---- Avatar -------------------------------------------------------------- */
+.avatar-wrap {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.avatar-wrap video,
+.avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(20, 60, 100, 0.4));
+}
+.emoji-buddy { font-size: 92px; }
+
+/* ---- Buttons ------------------------------------------------------------- */
+.actions { display: flex; gap: 8px; margin-top: 6px; pointer-events: auto; }
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .12s ease, filter .12s ease;
+  box-shadow: 0 6px 16px rgba(20, 60, 100, 0.22);
+}
+button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+button:active { transform: translateY(0); }
+.btn-drink { background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fff; }
+.btn-snooze { background: #fff; color: #37506a; }
+
+.progress {
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(59,167,240,0.9);
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(20,60,100,.25);
+}

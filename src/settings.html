@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self'" />
+  <title>Sipling — Settings</title>
+  <style>
+    :root {
+      --accent: #3BA7F0;
+      --accent-dark: #1f7fc4;
+      --bg: #f5f9fc;
+      --card: #ffffff;
+      --text: #1b2a38;
+      --muted: #66788a;
+      --border: #e3ecf3;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #10161d;
+        --card: #1a232d;
+        --text: #e8eef4;
+        --muted: #93a3b3;
+        --border: #29343f;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 22px 24px 28px;
+    }
+    header { text-align: center; margin-bottom: 20px; }
+    header .logo { font-size: 40px; }
+    header h1 { margin: 6px 0 2px; font-size: 22px; letter-spacing: -0.3px; }
+    header p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .goal-banner {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      color: #fff; border-radius: 14px; padding: 12px; margin-bottom: 20px;
+      font-weight: 700; font-size: 15px;
+      box-shadow: 0 8px 20px rgba(31,127,196,.25);
+    }
+
+    .field {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .field .hint { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+    .row { display: flex; align-items: center; gap: 10px; }
+    input[type="number"], select {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    input[type="range"] { flex: 1; accent-color: var(--accent); }
+    .val { min-width: 74px; text-align: right; font-weight: 700; font-size: 13px; }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .toggle-row .txt label { margin: 0; }
+    .toggle-row .txt .hint { margin: 2px 0 0; }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: var(--border); border-radius: 999px; transition: .2s;
+    }
+    .slider::before {
+      content: ""; position: absolute; height: 20px; width: 20px; left: 3px; top: 3px;
+      background: #fff; border-radius: 50%; transition: .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    }
+    .switch input:checked + .slider { background: var(--accent); }
+    .switch input:checked + .slider::before { transform: translateX(20px); }
+
+    .save-bar { position: sticky; bottom: 0; padding-top: 8px; }
+    #save {
+      width: 100%;
+      border: none; border-radius: 12px; padding: 13px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      color: #fff; font-size: 15px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(31,127,196,.3);
+      transition: transform .12s ease;
+    }
+    #save:active { transform: translateY(1px); }
+    #saved { text-align: center; color: var(--accent); font-size: 12px; font-weight: 700; height: 16px; margin-top: 6px; }
+    .two { display: flex; gap: 10px; }
+    .two .field { flex: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🌱💧</div>
+    <h1>Sipling</h1>
+    <p>Your little hydration companion</p>
+  </header>
+
+  <div class="goal-banner">💧 <span id="goalBanner">0 / 8 glasses today</span></div>
+
+  <div class="field">
+    <label>Remind me every</label>
+    <div class="hint">How often Sipling pops up to check on you.</div>
+    <div class="row">
+      <input type="range" id="interval" min="5" max="180" step="5" />
+      <span class="val" id="intervalVal">60 min</span>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="field">
+      <label>Active from</label>
+      <div class="hint">Start hour</div>
+      <select id="startHour"></select>
+    </div>
+    <div class="field">
+      <label>Active until</label>
+      <div class="hint">End hour</div>
+      <select id="endHour"></select>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="field">
+      <label>Daily goal</label>
+      <div class="hint">Glasses</div>
+      <input type="number" id="dailyGoal" min="1" max="30" />
+    </div>
+    <div class="field">
+      <label>Snooze for</label>
+      <div class="hint">Minutes</div>
+      <input type="number" id="snooze" min="1" max="60" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Where should I appear?</label>
+    <div class="hint">Screen corner for the floating buddy.</div>
+    <select id="position">
+      <option value="bottom-right">Bottom right</option>
+      <option value="bottom-left">Bottom left</option>
+      <option value="top-right">Top right</option>
+      <option value="top-left">Top left</option>
+    </select>
+  </div>
+
+  <div class="field toggle-row">
+    <div class="txt">
+      <label>Play a chime</label>
+      <div class="hint">Gentle sound with each reminder.</div>
+    </div>
+    <label class="switch"><input type="checkbox" id="sound" /><span class="slider"></span></label>
+  </div>
+
+  <div class="field toggle-row">
+    <div class="txt">
+      <label>Launch at login</label>
+      <div class="hint">Start Sipling automatically.</div>
+    </div>
+    <label class="switch"><input type="checkbox" id="launch" /><span class="slider"></span></label>
+  </div>
+
+  <div class="save-bar">
+    <button id="save">Save settings</button>
+    <div id="saved"></div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>
