@@ -1,71 +1,109 @@
-# 🌱💧 Sipling
+<p align="center">
+  <img src="assets/logo.png" alt="Sipling" width="128" />
+</p>
 
-A friendly desktop companion that reminds you to drink water. Sipling lives in your
-menu bar / system tray and pops a cute animated avatar onto your screen when it's time
-to hydrate — with a *"I drank it"* button, snooze, and a daily glass counter.
+<h1 align="center">Sipling</h1>
 
-Cross-platform: **macOS + Windows** (built with Electron).
+<p align="center">
+  A friendly desktop companion that reminds you to drink water. A little water-drop buddy
+  walks onto your screen, above every app, and waits with a glass until you tap
+  <strong>“I drank it”</strong> or <strong>Snooze</strong>.
+</p>
 
-## Features
-- 🚶 **Walk-across buddy** — a persistent, fullscreen, transparent, **click-through**
-  overlay (floats above every app, even fullscreen). Your buddy walks in from the screen
-  edge, pauses with a speech bubble + buttons, then walks back out. Only the buddy captures
-  the mouse; the rest of your screen stays fully usable.
-- 🎬 **Your own avatar** — drop an `avatar.mp4` / `.webm` / `.gif` into `assets/`
-  (see [assets/README.md](assets/README.md)). Falls back to a bouncing emoji if none.
-- ⏰ **Configurable schedule** — reminder interval, active hours (so it stays quiet at night).
-- 💧 **Daily goal + counter** — track glasses, celebrate when you hit your goal.
-- 😴 **Snooze & auto-dismiss** — never naggy; walks off by itself after 30s.
-- 🔔 Optional chime, launch-at-login, and choice of screen corner.
-- 🧰 Lives in the menu bar / tray — no dock clutter.
-- ⬆️ **Auto-updates** from GitHub Releases (packaged builds).
+<p align="center">
+  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3BA7F0" />
+  <img alt="Platform: macOS and Windows" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-1f7fc4" />
+  <img alt="Built with Electron" src="https://img.shields.io/badge/built%20with-Electron-2b2e3b" />
+</p>
 
-## Run it (development)
+---
+
+## What it does
+
+Sipling lives in your menu bar or system tray. On a schedule you set, its avatar walks in from
+a screen corner with a speech bubble and a couple of buttons, then waits there until you act. It
+does not nag in the background, and the rest of your screen stays clickable while it waits.
+
+- **Walk-across buddy.** A frameless, transparent, click-through overlay floats above every app,
+  including fullscreen ones. Only the buddy captures the mouse.
+- **Periodic reminders.** A fixed gap you choose, such as every two hours, inside the active
+  hours you set, so it stays quiet overnight.
+- **Daily goal and counter.** Track glasses and get a nudge when you reach the goal.
+- **Pick your sound.** Choose a notification chime (Cute Twinkle, Positive Twinkle, Double Tone)
+  and preview it before saving.
+- **Your own avatar.** Drop an `avatar.mp4`, `.webm`, or `.gif` into `assets/` and Sipling uses
+  it automatically. Without one it falls back to the app logo.
+- **Auto-updates** from GitHub Releases in packaged builds.
+
+## Download
+
+Grab the latest build from the [Releases](https://github.com/manthanmk66/Sipling/releases) page.
+
+- **macOS** — `Sipling.dmg`, universal for Apple Silicon and Intel.
+- **Windows** — `Sipling.exe` installer, x64 and arm64.
+
+Builds are currently unsigned. On first launch macOS may say the app is from an unidentified
+developer; right-click the app and choose **Open**, or allow it under *System Settings → Privacy
+& Security*. Signing and notarization need an Apple Developer account.
+
+## Run from source
+
 ```bash
-cd sipling
+git clone https://github.com/manthanmk66/Sipling.git
+cd Sipling
 npm install
 npm start
 ```
-Sipling starts in your menu bar. Right-click the tray icon → **Remind me now** to preview,
-or **Settings…** to configure.
+
+Sipling boots into your menu bar and opens a Settings window. Use the tray icon to preview the
+buddy (**Remind me now**) or to configure it (**Settings…**).
 
 ## Add your avatar
-Save your animated avatar as `assets/avatar.mp4` (or `.webm`). That's it — Sipling uses it
-automatically on the next reminder. See [assets/README.md](assets/README.md) for tips.
 
-## Build installers
+Save your animated avatar as `assets/avatar.mp4` (or `.webm` / `.gif`) and Sipling picks it up on
+the next reminder. A transparent `.webm` gives a no-box floating buddy. See
+[assets/README.md](assets/README.md) for tips and for how to add more notification sounds.
+
+## Build and release
+
+Installers are built with [electron-builder](https://www.electron.build/). Auto-update pulls from
+this repo's GitHub Releases.
+
+Locally:
+
 ```bash
-npm run dist:mac   # -> .dmg  (build on macOS)
-npm run dist:win   # -> .exe installer (build on Windows)
+npm run dist:mac   # dist/Sipling.dmg + Sipling.zip   (run on macOS)
+npm run dist:win   # dist/Sipling.exe                 (run on Windows)
 ```
-> Note: build the macOS app on a Mac and the Windows app on Windows (or via CI) for
-> best results — Electron installers are platform-specific.
 
-## Build & release (auto-update)
-Auto-update pulls from **GitHub Releases** (`manthanmk66/sipling` — change the `build.publish`
-block in [package.json](package.json) if your repo differs). To cut a release:
+Through CI, which builds both platforms for you: push a version tag and the
+[release workflow](.github/workflows/release.yml) builds macOS and Windows, then attaches the
+installers to a GitHub Release.
+
 ```bash
-export GH_TOKEN=<a GitHub token with repo scope>
-npm run dist:mac   # or dist:win — builds AND publishes to a draft release
+npm version patch
+git push --follow-tags
 ```
-`electron-builder` uploads the installer + the update metadata (`latest-mac.yml` / `latest.yml`)
-and the macOS `.zip` (required by Squirrel.Mac). Publish the draft release and installed apps
-update themselves within 6 hours (or on next launch).
-
-> Auto-update only runs in **packaged** builds — never in `npm start`.
 
 ## Project layout
+
 ```
 src/
   main.js        Electron main process: tray, scheduling, overlay, IPC
-  preload.js     Safe bridge to the renderer (contextIsolation)
-  store.js       Tiny JSON config store in userData (no deps)
+  preload.js     Bridge to the renderer (contextIsolation)
+  store.js       JSON config store in userData (no deps)
   updater.js     electron-updater wiring (GitHub Releases)
-  overlay.html/.css/.js   Fullscreen click-through overlay — the walk-across buddy
-  settings.html/.js       The settings window
+  tokens.css     Design tokens: the Hydro theme (OKLCH, Fredoka + Nunito)
+  overlay.*      Fullscreen click-through overlay, the walk-across buddy
+  settings.*     The settings window
 scripts/
-  generate-tray-icon.cjs  Draws the menu-bar template icon (no deps)
-assets/          Your avatar + generated icons (see its README)
+  generate-tray-icon.cjs   Draws the menu-bar template icon (no deps)
+assets/          Logo, avatar, notification sounds, fonts, generated icons
+build/           electron-builder resources (icon, mac entitlements)
+site/            Static landing and download page
+.github/         CI and release workflows
 ```
 
-Made with 💧 by Manthan.
+## License
+
+[MIT](LICENSE) © 2026 Manthan Reddy

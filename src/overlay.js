@@ -6,15 +6,14 @@ const progress = document.getElementById('progress');
 const ding = document.getElementById('ding');
 
 const MESSAGES = [
-  ['Time to drink some water! 💧', "Stay hydrated, you've got this."],
-  ['Hey! Hydration break 🥤', 'Your body will thank you.'],
-  ['Sip sip hooray! 💦', 'A quick glass keeps you sharp.'],
-  ["Water o'clock! ⏰", 'Even a few sips count.'],
-  ['Feeling thirsty yet? 🌊', 'Refill and refresh.'],
+  ['Time to drink some water', "Stay hydrated, you've got this."],
+  ['Hydration break', 'Your body will thank you.'],
+  ['Sip, sip, hooray', 'A quick glass keeps you sharp.'],
+  ["Water o'clock", 'Even a few sips count.'],
+  ['Feeling thirsty yet?', 'Refill and refresh.'],
 ];
 
 const ENTER_MS = 950; // keep in sync with the CSS transform transition
-let autoHideTimer = null;
 let interactive = false;
 let busy = false; // true while entering/leaving so we ignore re-triggers
 
@@ -49,10 +48,11 @@ function pickMessage() {
 function renderAvatar(avatar) {
   avatarWrap.innerHTML = '';
   if (!avatar) {
-    const el = document.createElement('div');
-    el.className = 'emoji-buddy';
-    el.textContent = '🧑‍🚀';
-    avatarWrap.appendChild(el);
+    const img = document.createElement('img');
+    img.className = 'fallback-avatar';
+    img.src = '../assets/logo.png';
+    img.alt = 'Sipling';
+    avatarWrap.appendChild(img);
     return;
   }
   if (avatar.type === 'mp4' || avatar.type === 'webm') {
@@ -97,7 +97,11 @@ function enter(payload) {
   buddy.classList.remove('off');
   buddy.classList.add('on');
 
-  if (payload.soundEnabled) ding.play().catch(() => {});
+  if (payload.soundUrl) {
+    ding.src = payload.soundUrl;
+    ding.currentTime = 0;
+    ding.play().catch(() => {});
+  }
 
   setTimeout(() => {
     buddy.classList.remove('walking');
@@ -105,9 +109,7 @@ function enter(payload) {
     buddy.dataset.state = 'resting';
     busy = false;
   }, ENTER_MS);
-
-  if (autoHideTimer) clearTimeout(autoHideTimer);
-  autoHideTimer = setTimeout(() => leave(() => window.waterBuddy.dismiss()), 30000);
+  // The buddy stays put until you tap "I drank it" or "Snooze" — no auto-dismiss.
 }
 
 function leave(cb) {
@@ -116,7 +118,6 @@ function leave(cb) {
     return;
   }
   busy = true;
-  if (autoHideTimer) clearTimeout(autoHideTimer);
   setInteractive(false);
   buddy.dataset.state = 'leaving';
   buddy.classList.remove('resting');

@@ -13,6 +13,8 @@
     "dist:win": "npm run gen:icons && electron-builder --win"
   },
   "devDependencies": {
+    "@fontsource/fredoka": "^5.3.0",
+    "@fontsource/nunito": "^5.3.0",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8"
   },
@@ -22,14 +24,23 @@
   "build": {
     "appId": "com.manthan.sipling",
     "productName": "Sipling",
+    "copyright": "© Manthan Reddy",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "files": [
       "src/**/*",
       "assets/**/*"
     ],
     "mac": {
       "category": "public.app-category.healthcare-fitness",
-      "icon": "assets/icon.png",
+      "icon": "build/icon.png",
       "artifactName": "${productName}.${ext}",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "target": [
         {
           "target": "dmg",
@@ -42,7 +53,8 @@
       ]
     },
     "win": {
-      "icon": "assets/icon.png",
+      "icon": "build/icon.png",
+      "artifactName": "${productName}.${ext}",
       "target": [
         {
           "target": "nsis",
@@ -61,7 +73,7 @@
     "publish": {
       "provider": "github",
       "owner": "manthanmk66",
-      "repo": "sipling"
+      "repo": "Sipling"
     }
   }
 }

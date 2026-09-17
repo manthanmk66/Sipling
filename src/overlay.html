@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' file: data:; media-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' file: data:; media-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' file:" />
   <title>Sipling</title>
+  <link rel="stylesheet" href="tokens.css" />
   <link rel="stylesheet" href="overlay.css" />
 </head>
 <body>
@@ -13,22 +14,23 @@
   <div class="stage">
     <div id="buddy" class="buddy" data-corner="bottom-right" data-state="idle">
       <div class="bubble" id="bubble">
-        <span id="bubbleMain">Time to drink some water! 💧</span>
+        <span id="bubbleMain">Time to drink some water</span>
         <small id="bubbleSub">Stay hydrated, you've got this.</small>
       </div>
       <div class="avatar-wrap" id="avatarWrap">
-        <div class="emoji-buddy">🧑‍🚀</div>
+        <img class="fallback-avatar" src="../assets/logo.png" alt="Sipling" />
       </div>
       <div class="progress" id="progress">0 / 8 glasses today</div>
       <div class="actions" id="actions">
-        <button class="btn-drink" id="drink">I drank it 💧</button>
+        <button class="btn-drink" id="drink">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="btn-ico"><path d="M12 3s6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 6-10 6-10z"/></svg>
+          I drank it
+        </button>
         <button class="btn-snooze" id="snooze">Snooze</button>
       </div>
     </div>
   </div>
-  <audio id="ding" preload="auto">
-    <source src="chime.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="ding" preload="auto"></audio>
   <script src="overlay.js"></script>
 </body>
 </html>

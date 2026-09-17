@@ -1,0 +1,35 @@
+# Build the macOS .dmg and Windows .exe installers and attach them to a GitHub
+# Release. Fires when you push a version tag, e.g.:
+#   npm version patch && git push --follow-tags
+# electron-builder auto-detects the OS on each runner (mac builds the .dmg, the
+# Windows runner builds the .exe) and uploads to the release named by the tag.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Build & publish installers
+        env:
+          # Provided automatically by GitHub Actions — used by electron-builder
+          # to create/upload the release. No extra secret needed for unsigned builds.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --publish always

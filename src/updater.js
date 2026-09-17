@@ -22,7 +22,7 @@ function initAutoUpdate() {
   autoUpdater.on('update-downloaded', (info) => {
     if (Notification.isSupported()) {
       new Notification({
-        title: 'Sipling update ready 🌱',
+        title: 'Sipling update ready',
         body: `v${info.version} will be installed next time you quit.`,
       }).show();
     }

@@ -1,18 +1,12 @@
-:root {
-  --accent: #3BA7F0;
-  --accent-dark: #1f7fc4;
-  --bubble: rgba(255, 255, 255, 0.97);
-  --text: #123;
-}
+/* Sipling — reminder overlay (walk-across buddy) styles (Hydro theme). */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: transparent;
-  /* Belt-and-braces: the main process also makes the window click-through. */
-  pointer-events: none;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  pointer-events: none; /* main process also makes the window click-through */
+  font-family: var(--font-body);
   -webkit-user-select: none;
   user-select: none;
 }
@@ -25,71 +19,64 @@ html, body {
   flex-direction: column;
   align-items: center;
   width: 300px;
-  /* Hidden by default; JS sets the resting corner + drives the walk-in. */
   opacity: 0;
   visibility: hidden;
-  transition: transform .9s cubic-bezier(.22,.68,.28,1.02), opacity .4s ease;
+  transition: transform var(--d-slow) var(--ease-out), opacity var(--d-base) var(--ease-out);
   will-change: transform, opacity;
 }
-/* Resting positions per corner (margins from the screen edge). */
 .buddy[data-corner="bottom-right"] { right: 40px; bottom: 40px; }
 .buddy[data-corner="bottom-left"]  { left: 40px;  bottom: 40px; }
 .buddy[data-corner="top-right"]    { right: 40px; top: 40px; }
 .buddy[data-corner="top-left"]     { left: 40px;  top: 40px; }
 
-/* Off-screen start/exit offsets (walk in from the nearest horizontal edge). */
 .buddy[data-corner$="right"].off { transform: translateX(140%); }
 .buddy[data-corner$="left"].off  { transform: translateX(-140%); }
 .buddy.on { transform: translateX(0); }
 
-/* While walking, the avatar bobs like footsteps. */
-.buddy.walking .avatar-wrap { animation: walkbob .42s ease-in-out infinite; }
+.buddy.walking .avatar-wrap { animation: walkbob .42s var(--ease-in-out) infinite; }
 @keyframes walkbob {
   0%, 100% { transform: translateY(0) rotate(-2deg); }
   50%      { transform: translateY(-9px) rotate(2deg); }
 }
-/* Gentle idle breathing once it has arrived. */
-.buddy.resting .avatar-wrap { animation: breathe 2.6s ease-in-out infinite; }
+.buddy.resting .avatar-wrap { animation: breathe 2.6s var(--ease-in-out) infinite; }
 @keyframes breathe {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-6px); }
 }
 
-/* Interactive parts only light up once resting. */
 .buddy .bubble, .buddy .actions, .buddy .progress {
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity .3s ease .15s, transform .3s ease .15s;
+  transition: opacity var(--d-base) var(--ease-out) .15s, transform var(--d-base) var(--ease-out) .15s;
 }
 .buddy.resting .bubble,
 .buddy.resting .actions,
-.buddy.resting .progress {
-  opacity: 1;
-  transform: translateY(0);
-}
+.buddy.resting .progress { opacity: 1; transform: translateY(0); }
 
 /* ---- Speech bubble ------------------------------------------------------- */
 .bubble {
   position: relative;
-  background: var(--bubble);
-  color: var(--text);
-  padding: 12px 16px;
-  border-radius: 18px;
-  font-size: 15px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 13px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  font-size: var(--t-base);
   font-weight: 600;
   text-align: center;
-  box-shadow: 0 12px 34px rgba(20, 60, 100, 0.28);
+  box-shadow: var(--shadow-lg);
   max-width: 260px;
   line-height: 1.35;
-  margin-bottom: 4px;
+  margin-bottom: var(--s-1);
   pointer-events: auto;
 }
+.bubble #bubbleMain { font-family: var(--font-display); letter-spacing: -0.01em; }
 .bubble small {
   display: block;
   font-weight: 500;
-  font-size: 12px;
-  color: #5a6b7a;
-  margin-top: 4px;
+  font-size: var(--t-xs);
+  color: var(--muted);
+  margin-top: var(--s-1);
 }
 .bubble::after {
   content: "";
@@ -99,7 +86,7 @@ html, body {
   transform: translateX(-50%);
   border-width: 8px 8px 0 8px;
   border-style: solid;
-  border-color: var(--bubble) transparent transparent transparent;
+  border-color: var(--surface) transparent transparent transparent;
 }
 
 /* ---- Avatar -------------------------------------------------------------- */
@@ -115,34 +102,48 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 10px 16px rgba(20, 60, 100, 0.4));
+  filter: drop-shadow(0 10px 16px oklch(45% 0.10 244 / .4));
 }
-.emoji-buddy { font-size: 92px; }
 
 /* ---- Buttons ------------------------------------------------------------- */
-.actions { display: flex; gap: 8px; margin-top: 6px; pointer-events: auto; }
+.actions { display: flex; gap: var(--s-2); margin-top: var(--s-1); pointer-events: auto; }
 button {
+  font-family: var(--font-display);
+  display: inline-flex; align-items: center; gap: 6px;
   border: none;
-  border-radius: 999px;
-  padding: 9px 16px;
-  font-size: 13px;
+  border-radius: var(--r-pill);
+  padding: 10px 18px;
+  font-size: var(--t-sm);
   font-weight: 700;
   cursor: pointer;
-  transition: transform .12s ease, filter .12s ease;
-  box-shadow: 0 6px 16px rgba(20, 60, 100, 0.22);
+  transition: transform var(--d-fast) var(--ease-out), filter var(--d-fast) var(--ease-out);
+  box-shadow: var(--shadow-md);
+}
+.btn-ico {
+  width: 15px; height: 15px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.9;
+  stroke-linecap: round; stroke-linejoin: round;
 }
 button:hover { transform: translateY(-1px); filter: brightness(1.05); }
-button:active { transform: translateY(0); }
-.btn-drink { background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fff; }
-.btn-snooze { background: #fff; color: #37506a; }
+button:active { transform: translateY(0) scale(0.97); }
+button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.btn-drink { background: linear-gradient(160deg, var(--accent), var(--accent-strong)); color: var(--on-accent); }
+.btn-snooze { background: var(--surface); color: var(--ink-soft); border: 1px solid var(--line); }
 
 .progress {
-  margin-top: 8px;
-  font-size: 11px;
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-size: var(--t-xs);
   font-weight: 700;
-  color: #fff;
-  background: rgba(59,167,240,0.9);
-  padding: 3px 10px;
-  border-radius: 999px;
-  box-shadow: 0 4px 10px rgba(20,60,100,.25);
+  color: var(--on-accent);
+  background: var(--accent);
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buddy { transition-duration: 120ms; }
+  .buddy.walking .avatar-wrap,
+  .buddy.resting .avatar-wrap { animation: none; }
 }

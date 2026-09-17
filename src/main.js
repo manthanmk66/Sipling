@@ -22,6 +22,13 @@ let reminderTimer = null;
 
 const ASSETS_DIR = path.join(__dirname, '..', 'assets');
 
+// Notification sounds the user can pick from in Settings (files in assets/notification/).
+const SOUND_FILES = {
+  'cute-twinkle': 'cute-twinkle.wav',
+  'positive-twinkle': 'positive-twinkle.wav',
+  'double-tone': 'double-tone.wav',
+};
+
 // Keep the app out of the macOS dock — it lives in the tray/menu bar.
 if (process.platform === 'darwin' && app.dock) {
   app.dock.hide();
@@ -146,11 +153,16 @@ function showReminder() {
 
   const avatar = findAvatar();
   const cfg = store.load();
+  const soundFile = SOUND_FILES[cfg.soundName] || SOUND_FILES['cute-twinkle'];
+  const soundUrl =
+    cfg.soundEnabled && soundFile
+      ? 'file://' + path.join(ASSETS_DIR, 'notification', soundFile)
+      : null;
   const payload = {
     avatar: avatar ? { url: 'file://' + avatar.path, type: avatar.type } : null,
     glassesToday: cfg.glassesToday,
     dailyGoal: cfg.dailyGoal,
-    soundEnabled: cfg.soundEnabled,
+    soundUrl,
     position: cfg.position,
   };
 
@@ -211,7 +223,7 @@ function refreshTrayMenu() {
   if (!tray) return;
   const cfg = store.load();
   const menu = Menu.buildFromTemplate([
-    { label: `💧 ${cfg.glassesToday} / ${cfg.dailyGoal} glasses today`, enabled: false },
+    { label: `${cfg.glassesToday} / ${cfg.dailyGoal} glasses today`, enabled: false },
     { type: 'separator' },
     { label: 'Remind me now', click: () => showReminder() },
     { label: 'I drank a glass  +1', click: () => logGlass() },
@@ -231,7 +243,7 @@ function logGlass() {
   if (next.glassesToday === next.dailyGoal && Notification.isSupported()) {
     new Notification({
       title: 'Sipling',
-      body: `🎉 You hit your goal of ${next.dailyGoal} glasses today!`,
+      body: `You hit your goal of ${next.dailyGoal} glasses today.`,
     }).show();
   }
   return next;
@@ -246,11 +258,9 @@ ipcMain.handle('config:set', (_e, patch) => {
   refreshTrayMenu();
   return next;
 });
+ipcMain.handle('glass:add', () => logGlass());
 ipcMain.on('reminder:drank', () => logGlass());
 ipcMain.on('reminder:snooze', () => snooze());
-ipcMain.on('reminder:dismiss', () => {
-  /* the buddy walks off on its own; nothing to do here */
-});
 ipcMain.on('overlay:interactive', (_e, on) => {
   if (overlay && !overlay.isDestroyed()) {
     overlay.setIgnoreMouseEvents(!on, { forward: true });
@@ -288,6 +298,13 @@ if (!gotLock) {
     scheduleNextReminder();
     initAutoUpdate();
 
+    // On the very first launch only, open Settings so there's a visible anchor
+    // even if the menu-bar icon is hard to spot. Later launches stay in the tray.
+    if (!store.get('launchedBefore')) {
+      openSettings();
+      store.save({ launchedBefore: true });
+    }
+
     // Dev helper: fire a reminder shortly after launch for quick visual testing.
     if (process.env.SIPLING_TEST_REMINDER) {
       setTimeout(() => showReminder(), 1500);
@@ -296,11 +313,14 @@ if (!gotLock) {
     // Friendly first-run nudge.
     if (Notification.isSupported()) {
       new Notification({
-        title: 'Sipling is here 🌱💧',
-        body: 'I live in your menu bar. I\'ll pop by when it\'s time to hydrate.',
+        title: 'Sipling is running',
+        body: 'It lives in your menu bar and will pop by when it\'s time to hydrate.',
       }).show();
     }
   });
+
+  // Reopening Sipling (e.g. launching it again) brings the settings window back.
+  app.on('activate', () => openSettings());
 
   app.on('window-all-closed', (e) => {
     // Tray app: don't quit when windows close.

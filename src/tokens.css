@@ -1,0 +1,110 @@
+/* Sipling design tokens — "Hydro" theme.
+ * Colours in OKLCH; light in :root, dark under prefers-color-scheme.
+ * Type: Fredoka (display) + Nunito (body), bundled as woff2 (offline-safe).
+ */
+@font-face {
+  font-family: "Fredoka"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("../assets/fonts/fredoka-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fredoka"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/fredoka-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fredoka"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("../assets/fonts/fredoka-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/nunito-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/nunito-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("../assets/fonts/nunito-latin-700-normal.woff2") format("woff2");
+}
+
+:root {
+  /* Paper + surfaces */
+  --paper:      oklch(98.5% 0.010 225);
+  --paper-2:    oklch(96.2% 0.018 228);
+  --paper-3:    oklch(93.0% 0.026 230);
+  --surface:    oklch(100% 0 0);
+  --surface-2:  oklch(97.5% 0.012 228);
+
+  /* Ink */
+  --ink:        oklch(30% 0.035 255);
+  --ink-soft:   oklch(46% 0.028 252);
+  --muted:      oklch(60% 0.022 248);
+  --line:       oklch(90% 0.016 235);
+  --line-soft:  oklch(94% 0.012 235);
+
+  /* Accents — water */
+  --accent:       oklch(60% 0.145 238);
+  --accent-strong:oklch(52% 0.160 242);
+  --accent-ink:   oklch(40% 0.140 245);
+  --accent-soft:  oklch(95% 0.030 232);
+  --aqua:         oklch(74% 0.120 205);
+  --good:         oklch(70% 0.150 152);
+  --good-soft:    oklch(95% 0.045 155);
+  --on-accent:    oklch(99% 0.010 230);
+
+  /* Type */
+  --font-display: "Fredoka", ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --t-xs: 11px; --t-sm: 12.5px; --t-base: 14.5px; --t-md: 16px;
+  --t-lg: 19px; --t-xl: 24px; --t-2xl: 32px; --t-3xl: 46px;
+
+  /* 4-pt spacing */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+
+  /* Radius */
+  --r-sm: 9px; --r-md: 13px; --r-lg: 18px; --r-xl: 26px; --r-pill: 999px;
+
+  /* Motion */
+  --ease-out:    cubic-bezier(.22,.68,.28,1);
+  --ease-in-out: cubic-bezier(.6,0,.35,1);
+  --ease-in:     cubic-bezier(.55,0,.9,.35);
+  --d-fast: 130ms; --d-base: 220ms; --d-slow: 440ms;
+
+  /* Shadows — soft, blue-tinted */
+  --shadow-sm: 0 1px 2px oklch(50% 0.08 240 / .10), 0 2px 6px oklch(50% 0.08 240 / .08);
+  --shadow-md: 0 6px 18px oklch(48% 0.09 242 / .14);
+  --shadow-lg: 0 18px 44px oklch(45% 0.10 244 / .22);
+  --focus:     oklch(58% 0.16 240);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:      oklch(23% 0.022 250);
+    --paper-2:    oklch(20% 0.022 250);
+    --paper-3:    oklch(27% 0.026 248);
+    --surface:    oklch(28% 0.026 248);
+    --surface-2:  oklch(31% 0.028 247);
+
+    --ink:        oklch(95% 0.012 230);
+    --ink-soft:   oklch(82% 0.020 232);
+    --muted:      oklch(68% 0.022 236);
+    --line:       oklch(38% 0.024 245);
+    --line-soft:  oklch(33% 0.020 246);
+
+    --accent:       oklch(72% 0.135 230);
+    --accent-strong:oklch(78% 0.130 226);
+    --accent-ink:   oklch(85% 0.100 224);
+    --accent-soft:  oklch(33% 0.045 236);
+    --aqua:         oklch(78% 0.110 200);
+    --good:         oklch(76% 0.140 154);
+    --good-soft:    oklch(34% 0.060 156);
+    --on-accent:    oklch(20% 0.030 245);
+
+    --shadow-sm: 0 1px 2px oklch(0% 0 0 / .34);
+    --shadow-md: 0 8px 22px oklch(0% 0 0 / .42);
+    --shadow-lg: 0 20px 48px oklch(0% 0 0 / .55);
+    --focus:     oklch(78% 0.13 228);
+  }
+}

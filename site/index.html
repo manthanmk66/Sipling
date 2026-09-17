@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sipling — a friendly water-drink reminder for your desktop</title>
+  <meta name="description" content="Sipling is a desktop companion that reminds you to drink water. A little water-drop buddy walks onto your screen and waits until you drink up. macOS and Windows." />
+  <link rel="icon" href="favicon.png" />
+  <meta property="og:title" content="Sipling — drink-water reminder" />
+  <meta property="og:description" content="A desktop buddy that reminds you to hydrate. macOS and Windows." />
+  <meta property="og:image" content="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <span class="brand"><img src="logo.png" alt="" /> Sipling</span>
+      <a class="gh" href="https://github.com/manthanmk66/Sipling">View on GitHub</a>
+    </nav>
+
+    <header class="hero">
+      <img class="hero-logo" src="logo.png" alt="Sipling, a walking water-drop holding a glass of water" />
+      <h1>Stay hydrated,<br />the friendly way.</h1>
+      <p class="sub">
+        A little water-drop buddy walks onto your screen, waits with a glass until you drink up,
+        then heads off. It lives in your menu bar and stays quiet the rest of the time.
+      </p>
+      <div class="downloads">
+        <a class="btn btn-primary" href="https://github.com/manthanmk66/Sipling/releases/latest/download/Sipling.dmg">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="btn-ico" fill="currentColor" stroke="none">
+            <path d="M16.3 12.4c0-2 1.6-3 1.7-3.1-.9-1.4-2.4-1.5-2.8-1.6-1.2-.1-2.3.7-2.9.7s-1.5-.7-2.5-.7c-1.3 0-2.5.8-3.1 1.9-1.4 2.4-.4 5.9.9 7.8.7 1 1.4 2 2.4 2 .9 0 1.3-.6 2.4-.6s1.4.6 2.4.6 1.6-.9 2.2-1.9c.4-.6.6-1 .9-1.7-2.3-.9-2.7-4.3-.5-5.6z"/>
+            <path d="M14.4 6.4c.5-.6.9-1.5.8-2.4-.8 0-1.7.5-2.2 1.2-.5.5-.9 1.4-.8 2.3.9 0 1.7-.5 2.2-1.1z"/>
+          </svg>
+          Download for macOS
+        </a>
+        <a class="btn btn-secondary" href="https://github.com/manthanmk66/Sipling/releases/latest/download/Sipling.exe">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="btn-ico" fill="currentColor" stroke="none">
+            <path d="M3 5.9 10.3 4.8v6.7H3zM11.4 4.6 21 3.2v8.3h-9.6zM3 12.5h7.3v6.6L3 18.1zM11.4 12.5H21v8.3l-9.6-1.4z"/>
+          </svg>
+          Download for Windows
+        </a>
+      </div>
+      <p class="note">Free and open source. Universal macOS (Apple Silicon and Intel), Windows x64 and arm64.</p>
+    </header>
+
+    <section class="features">
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg>
+        <h3>Walk-across buddy</h3>
+        <p>Your avatar floats above every app, even in fullscreen, and only the buddy captures your mouse. Keep working while it waits.</p>
+      </div>
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <h3>On your schedule</h3>
+        <p>Pick a fixed gap, say every two hours, and set the hours it runs. Overnight it stays quiet.</p>
+      </div>
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 6-10 6-10z"/></svg>
+        <h3>Reach your goal</h3>
+        <p>Set a daily glass goal and watch the water bar fill. Sipling cheers when you get there.</p>
+      </div>
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+        <h3>Your own avatar</h3>
+        <p>Drop in an animated avatar and choose the chime you like. The buddy becomes yours.</p>
+      </div>
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1.5"/><circle cx="17" cy="6" r="1" fill="currentColor" stroke="none"/><path d="M6 12h12M6 16h8"/></svg>
+        <h3>Out of your way</h3>
+        <p>It lives in the menu bar or system tray. No dock clutter, no window to manage.</p>
+      </div>
+      <div class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V9"/><path d="m8 13 4-4 4 4"/><path d="M6 19h12"/></svg>
+        <h3>Always up to date</h3>
+        <p>Packaged builds update themselves from GitHub Releases, so you always run the latest.</p>
+      </div>
+    </section>
+
+    <footer>
+      Free and open source. <a href="https://github.com/manthanmk66/Sipling">github.com/manthanmk66/Sipling</a> · MIT
+    </footer>
+  </div>
+</body>
+</html>
