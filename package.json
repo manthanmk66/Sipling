@@ -1,6 +1,6 @@
 {
   "name": "sipling",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Sipling — a friendly desktop companion that reminds you to drink water.",
   "main": "src/main.js",
   "author": "Manthan Reddy",
