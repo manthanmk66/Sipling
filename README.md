@@ -37,10 +37,12 @@ does not nag in the background, and the rest of your screen stays clickable whil
 
 ## Download
 
-Grab the latest build from the [Releases](https://github.com/manthanmk66/Sipling/releases) page.
+Grab the latest build (these always point at the newest release):
 
-- **macOS** — `Sipling.dmg`, universal for Apple Silicon and Intel.
-- **Windows** — `Sipling.exe` installer, x64 and arm64.
+- **macOS** — [Download Sipling.dmg](https://github.com/manthanmk66/Sipling/releases/latest/download/Sipling.dmg) (universal, Apple Silicon and Intel)
+- **Windows** — [Download Sipling.exe](https://github.com/manthanmk66/Sipling/releases/latest/download/Sipling.exe) (x64 and arm64)
+
+Or browse every version on the [Releases](https://github.com/manthanmk66/Sipling/releases) page.
 
 Builds are currently unsigned. On first launch macOS may say the app is from an unidentified
 developer; right-click the app and choose **Open**, or allow it under *System Settings → Privacy
