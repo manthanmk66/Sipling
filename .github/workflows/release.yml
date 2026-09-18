@@ -1,8 +1,10 @@
 # Build the macOS .dmg and Windows .exe installers and attach them to a GitHub
 # Release. Fires when you push a version tag, e.g.:
 #   npm version patch && git push --follow-tags
-# electron-builder auto-detects the OS on each runner (mac builds the .dmg, the
-# Windows runner builds the .exe) and uploads to the release named by the tag.
+# Each runner builds its own OS, then uploads its artifacts (installer + the
+# electron-updater metadata) to the release with the gh CLI. Building and
+# uploading are separate steps because electron-builder's own publisher times
+# out on large artifacts.
 name: Release
 
 on:
@@ -27,9 +29,16 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - name: Build & publish installers
+      - name: Build installers
+        run: npx electron-builder --publish never
+      - name: Upload to release
+        shell: bash
         env:
-          # Provided automatically by GitHub Actions — used by electron-builder
-          # to create/upload the release. No extra secret needed for unsigned builds.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx electron-builder --publish always
+        run: |
+          shopt -s nullglob
+          # Create the release once; the other matrix job may have created it already.
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" \
+            --notes "Automated build of $GITHUB_REF_NAME." --verify-tag || true
+          files=(dist/*.dmg dist/*.zip dist/*.exe dist/*.blockmap dist/latest*.yml)
+          gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
